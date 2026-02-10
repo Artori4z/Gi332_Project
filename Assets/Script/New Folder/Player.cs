@@ -19,8 +19,9 @@ public class Player : Entity
     }
     protected override void FixedUpdate() 
     {
-        Vector3 movement = new Vector3(MoveInput.x, 0f, MoveInput.y);
-        rb.AddForce(movement * Speed);
+        //Vector3 movement = new Vector3(MoveInput.x, 0f, MoveInput.y);
+        //rb.AddForce(movement * Speed);
+
         if (rb != null)
         {
             rb.mass = Def;
