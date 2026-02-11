@@ -576,8 +576,8 @@ GameObject:
   - component: {fileID: 743543008}
   - component: {fileID: 743543007}
   - component: {fileID: 743543005}
-  - component: {fileID: 743543012}
-  - component: {fileID: 743543011}
+  - component: {fileID: 743543016}
+  - component: {fileID: 743543017}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -610,7 +610,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 64
   m_CollisionDetection: 0
 --- !u!135 &743543007
 SphereCollider:
@@ -699,13 +699,13 @@ Transform:
   m_GameObject: {fileID: 743543004}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.72, y: 0.79000044, z: -1.624301}
+  m_LocalPosition: {x: -2.72, y: 0.25, z: -1.624301}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &743543011
+--- !u!114 &743543016
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -714,12 +714,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 743543004}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38a447fc3e0320142b96960eb1acd1ee, type: 3}
+  m_Script: {fileID: 11500000, guid: e90f7cc32ada6b04fa5320deee1a5146, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::POneTest
-  Speed: 5
-  Def: 1
---- !u!114 &743543012
+  m_EditorClassIdentifier: Assembly-CSharp::StopHelper
+--- !u!114 &743543017
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -794,7 +792,7 @@ GameObject:
   - component: {fileID: 1476657270}
   - component: {fileID: 1476657269}
   - component: {fileID: 1476657268}
-  - component: {fileID: 1476657267}
+  - component: {fileID: 1476657276}
   m_Layer: 0
   m_Name: Player (1)
   m_TagString: Player
@@ -802,20 +800,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1476657267
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1476657266}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3e46916eac1a0c488cef6953f6e9031, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PTwoTset
-  Speed: 5
-  Def: 1
 --- !u!114 &1476657268
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -948,6 +932,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1476657276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1476657266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e90f7cc32ada6b04fa5320deee1a5146, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StopHelper
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

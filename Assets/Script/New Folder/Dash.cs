@@ -1,14 +1,16 @@
 ﻿using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class Dash : Player
 {
-    private float dashForce = 20f;
+    private float dashForce = 10f;
     protected override void Start()
     {
         Hp = 100;
         Speed = 10f;
         Def = 1;
-        AtkPower = 10;
+        AtkPower = 20;
+        SmoothTime = 3f;
     }
 
     protected override void Class()
@@ -28,5 +30,7 @@ public class Dash : Player
             dashDir = transform.forward;
         }
         rb.AddForce(dashDir * dashForce, ForceMode.Impulse);
+        helper = GetComponent<StopHelper>();
+        helper.ResetAfter(1f);
     }
 }

@@ -9,7 +9,8 @@ public class Jumper : Player
         Hp = 100;
         Speed = 10f;
         Def = 1;
-        AtkPower = 10;
+        AtkPower = 20;
+        SmoothTime = 3f;
     }
     protected override void Class()
     {
