@@ -41,25 +41,4 @@ public class Entity : MonoBehaviour
     protected virtual void Move() { }
     protected virtual void Die() { }
     // Coroutine สำหรับค่อยๆ ทำให้ศัตรูหยุด
-    protected IEnumerator StopTargetAfterTime(Rigidbody rb, float duration)
-    {
-
-        float elapsed = 0f;
-        // เก็บค่าความเร็วเริ่มต้นหลังโดนผลักไว้
-        Vector3 initialVelocity = rb.linearVelocity; // ถ้า Unity เวอร์ชั่นเก่าใช้ .velocity
-
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-
-            // ค่อยๆ ลดความเร็วลงจนเป็น 0 (Lerp จากความเร็วเริ่มต้นไปสู่ 0)
-            rb.linearVelocity = Vector3.Lerp(initialVelocity, Vector3.zero, elapsed / duration);
-
-            yield return null; // รอเฟรมถัดไป
-        }
-
-        // เมื่อครบ 1 วินาที ให้หยุดสนิทแน่นอน
-        rb.linearVelocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero; // หยุดการหมุนด้วย
-    }
 }
