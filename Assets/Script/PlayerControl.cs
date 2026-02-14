@@ -13,18 +13,8 @@ public class PlayerControl : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         controls = new InputSystem_Actions(); // ชื่อต้องตรงกับไฟล์ในรูปของคุณ
+        controls.Player.Enable();
     }
-
-    void OnEnable()
-    {
-        controls.Player.Enable(); // เปิดใช้งาน Action Map ชื่อ Player
-    }
-
-    void OnDisable()
-    {
-        controls.Player.Disable(); // ปิดใช้งานเมื่อ object ถูกปิด
-    }
-
     void Update()
     {
         // อ่านค่า Vector 2 จาก Action "Move" ในรูปที่คุณส่งมา
@@ -37,4 +27,5 @@ public class PlayerControl : MonoBehaviour
         Vector3 movement = new Vector3(moveInput.x, 0f, moveInput.y);
         rb.AddForce(movement * speed);
     }
+
 }
