@@ -38,7 +38,7 @@ public class Player : Entity
         {
             rb.mass = Def;
         }
-        
+
     }
     protected void OnEnable()
     {
@@ -52,10 +52,13 @@ public class Player : Entity
     {
         // เฉพาะ "เจ้าของ" ตัวละครที่วิ่งไปชนเท่านั้นที่มีสิทธิ์สั่ง (ป้องกันการรันซ้ำซ้อน)
         if (!IsOwner) return;
-
+        if (collision.gameObject.CompareTag("Destory"))
+        {
+            Die();
+        }
         if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Player"))
         {
-            
+
             var targetNetObj = collision.gameObject.GetComponent<NetworkObject>();
             if (targetNetObj != null)
             {
@@ -71,28 +74,27 @@ public class Player : Entity
         // ส่งสัญญาณไปหา Client ทุกเครื่อง (รวมถึง Host) ว่าให้จัดการแรงผลักตัวละครตัวนี้
         ApplyAtkEffectClientRpc(targetId, direction);
     }
-
     [ClientRpc]
     void ApplyAtkEffectClientRpc(ulong targetId, Vector3 direction)
     {
-        // หาว่าตัวละครตัวไหนในฉากที่มี ID ตรงกับที่ Server ส่งมา
         if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(targetId, out var targetNetObj))
         {
-            GameObject target = targetNetObj.gameObject;
-            Rigidbody targetRb = target.GetComponent<Rigidbody>();
+            Entity targetEntity = targetNetObj.GetComponent<Entity>();
+            Rigidbody targetRb = targetNetObj.GetComponent<Rigidbody>();
+
+            if (targetEntity != null)
+            {
+                // เรียกใช้ฟังก์ชัน public ที่เราสร้างไว้
+                // ส่งแค่ค่า AtkPower ไป เดี๋ยว Entity ไปลบ Def เองข้างใน
+                targetEntity.TakeDamage(AtkPower);
+            }
 
             if (targetRb != null)
             {
-                Hp -= AtkPower - Def;
-                // ทำการผลัก (รันเหมือนกันทุกเครื่อง ทั้ง Host และ Client จะเห็นแรงตรงกัน)
                 targetRb.AddForce(direction * AtkPower, ForceMode.Impulse);
                 targetRb.linearDamping = 5f;
-
-                // ส่วนของการลดเลือด (แนะนำให้ลดที่ Server เท่านั้นในอนาคต)
-                // if(IsServer) { Hp -= AtkPower; } 
-
-                Debug.Log($"Pushed target: {targetId}");
             }
         }
+
     }
 }
