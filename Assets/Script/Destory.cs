@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Destory : MonoBehaviour
 {
-    public int Hp;
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
@@ -11,7 +11,7 @@ public class Destory : MonoBehaviour
         }
         if (collision.gameObject.CompareTag("Player"))
         {
-            Hp = 0;
+            Destroy(collision.gameObject);
         }
     }
 }

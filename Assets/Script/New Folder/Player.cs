@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.Netcode;
+using UnityEngine;
 
 public class Player : Entity
 {
@@ -6,19 +7,21 @@ public class Player : Entity
     protected Vector2 MoveInput;
     protected float Cooldown = 5f;
     protected float CanCast = 0f;
-    
+
     protected virtual void Class() { }
     protected override void Awake()
     {
         rb = GetComponent<Rigidbody>();
         Controls = new InputSystem_Actions();
+        Controls.Enable();
     }
-    protected override void Update() 
+    protected override void Update()
     {
+        if (!IsOwner) return;
         MoveInput = Controls.Player.Move.ReadValue<Vector2>();
         Class();
     }
-    protected override void FixedUpdate() 
+    protected override void FixedUpdate()
     {
         Vector3 movement = new Vector3(MoveInput.x, 0f, MoveInput.y);
         // 1. หา "เป้าหมาย" ของทิศทางที่อยากไป
@@ -26,7 +29,7 @@ public class Player : Entity
 
         // 2. ใช้ Lerp ค่อยๆ ปรับความเร็วปัจจุบัน (currentVelocity) ให้ไปหาเป้าหมาย
         // วิธีนี้จะทำให้เวลาปล่อยปุ่ม ค่าจะไม่กลายเป็น 0 ทันที แต่จะค่อยๆ ลดลงจนหยุด
-        currentVelocity = Vector3.Lerp(currentVelocity, targetDirection, SmoothTime * Time.deltaTime);
+        currentVelocity = Vector3.Lerp(currentVelocity, targetDirection, SmoothTime * Time.fixedDeltaTime);
 
         // 3. บวกตำแหน่งด้วยความเร็วที่กำลังไหลอยู่
         transform.position += currentVelocity * Speed * Time.deltaTime;
@@ -35,6 +38,7 @@ public class Player : Entity
         {
             rb.mass = Def;
         }
+        
     }
     protected void OnEnable()
     {
@@ -46,10 +50,49 @@ public class Player : Entity
     }
     protected virtual void OnCollisionEnter(Collision collision)
     {
+        // เฉพาะ "เจ้าของ" ตัวละครที่วิ่งไปชนเท่านั้นที่มีสิทธิ์สั่ง (ป้องกันการรันซ้ำซ้อน)
+        if (!IsOwner) return;
+
         if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Player"))
         {
-            Atk(collision.gameObject);
+            
+            var targetNetObj = collision.gameObject.GetComponent<NetworkObject>();
+            if (targetNetObj != null)
+            {
+                // คำนวณทิศทางจากเครื่องเราส่งไปให้ Server
+                Vector3 pushDir = (collision.transform.position - transform.position).normalized;
+                RequestAtkServerRpc(targetNetObj.NetworkObjectId, pushDir);
+            }
         }
     }
-    
+    [ServerRpc]
+    void RequestAtkServerRpc(ulong targetId, Vector3 direction)
+    {
+        // ส่งสัญญาณไปหา Client ทุกเครื่อง (รวมถึง Host) ว่าให้จัดการแรงผลักตัวละครตัวนี้
+        ApplyAtkEffectClientRpc(targetId, direction);
+    }
+
+    [ClientRpc]
+    void ApplyAtkEffectClientRpc(ulong targetId, Vector3 direction)
+    {
+        // หาว่าตัวละครตัวไหนในฉากที่มี ID ตรงกับที่ Server ส่งมา
+        if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(targetId, out var targetNetObj))
+        {
+            GameObject target = targetNetObj.gameObject;
+            Rigidbody targetRb = target.GetComponent<Rigidbody>();
+
+            if (targetRb != null)
+            {
+                Hp -= AtkPower - Def;
+                // ทำการผลัก (รันเหมือนกันทุกเครื่อง ทั้ง Host และ Client จะเห็นแรงตรงกัน)
+                targetRb.AddForce(direction * AtkPower, ForceMode.Impulse);
+                targetRb.linearDamping = 5f;
+
+                // ส่วนของการลดเลือด (แนะนำให้ลดที่ Server เท่านั้นในอนาคต)
+                // if(IsServer) { Hp -= AtkPower; } 
+
+                Debug.Log($"Pushed target: {targetId}");
+            }
+        }
+    }
 }

@@ -25,7 +25,14 @@ public class Jumper : Player
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         isGrounded = false;
     }
-
+    protected override void FixedUpdate()
+    {
+        base.FixedUpdate();
+        if (Hp <= 0)
+        {
+            Die();
+        }
+    }
     protected override void OnCollisionEnter(Collision collision)
     {
         base.OnCollisionEnter(collision);

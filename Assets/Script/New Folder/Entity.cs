@@ -1,9 +1,10 @@
 ﻿using System.Collections;
+using Unity.Netcode;
 using UnityEngine;
 
-public class Entity : MonoBehaviour
+public class Entity : NetworkBehaviour
 {
-    protected int Hp;
+    [SerializeField] protected int Hp;
     protected float Speed;
     protected int Def;
     protected int AtkPower;
@@ -12,7 +13,7 @@ public class Entity : MonoBehaviour
     protected Vector3 currentVelocity;
     protected float SmoothTime;
     protected virtual void Awake()
-    {
+    { 
         rb = GetComponent<Rigidbody>();
     }
     protected virtual void Start() { }
@@ -21,13 +22,12 @@ public class Entity : MonoBehaviour
 
     protected void Atk(GameObject target)
     {
-        Hp -= AtkPower - Def;
         Rigidbody targetRb = target.GetComponent<Rigidbody>();
         if (targetRb == null) return;
 
         // ผลัก
         Vector3 pushDir = (target.transform.position - transform.position).normalized;
-        targetRb.AddForce(pushDir * AtkPower, ForceMode.Impulse);
+        targetRb.AddForce(pushDir * AtkPower * 2, ForceMode.Impulse);
 
         // ทำให้หนืดเพื่อจะหยุด
         targetRb.linearDamping = 5f;
@@ -39,6 +39,9 @@ public class Entity : MonoBehaviour
         helper.ResetAfter(1f);
     }
     protected virtual void Move() { }
-    protected virtual void Die() { }
-    // Coroutine สำหรับค่อยๆ ทำให้ศัตรูหยุด
+    protected virtual void Die() 
+    {
+        Time.timeScale = 0f;
+        Destroy(gameObject);
+    }
 }
