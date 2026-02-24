@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2533452583374001677}
   - component: {fileID: 1964283924266483654}
   - component: {fileID: 84143087791438951}
+  - component: {fileID: 474512512637056020}
   - component: {fileID: 4980947031827689541}
   m_Layer: 0
   m_Name: Tank
@@ -140,7 +141,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &84143087791438951
 MonoBehaviour:
@@ -154,6 +155,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e90f7cc32ada6b04fa5320deee1a5146, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StopHelper
+--- !u!114 &474512512637056020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1982939857750706729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 552988763
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &4980947031827689541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,3 +192,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 459a8fbe68f63d74690f4aa4b9462255, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Tank
+  ShowTopMostFoldoutHeaderGroup: 1
