@@ -4,7 +4,7 @@ public class Tank : Player
 {
     private float buffDuration = 5f;
     private int DefBoost = 5;
-    private int SpeedBoost = 50;
+    private int SpeedBoost = 5;
     private bool isBuffActive = false;
     private float buffEndTime = 0f;
     private int originalDef;
