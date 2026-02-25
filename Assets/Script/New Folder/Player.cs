@@ -68,12 +68,14 @@ public class Player : Entity
             }
         }
     }
+
     [ServerRpc]
     void RequestAtkServerRpc(ulong targetId, Vector3 direction)
     {
         // ส่งสัญญาณไปหา Client ทุกเครื่อง (รวมถึง Host) ว่าให้จัดการแรงผลักตัวละครตัวนี้
         ApplyAtkEffectClientRpc(targetId, direction);
     }
+
     [ClientRpc]
     void ApplyAtkEffectClientRpc(ulong targetId, Vector3 direction)
     {

@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 3895321884643733481}
   - component: {fileID: -96082469149691489}
   - component: {fileID: 3705543723510553459}
+  - component: {fileID: -8204909843879319952}
   m_Layer: 0
   m_Name: Jumper
   m_TagString: Player
@@ -195,6 +196,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Jumper
   ShowTopMostFoldoutHeaderGroup: 1
+  winUI: {fileID: 0}
+  loseUI: {fileID: 0}
+  Hp: 0
 --- !u!114 &-96082469149691489
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -258,3 +262,19 @@ MonoBehaviour:
   UseRigidBodyForMotion: 0
   AutoUpdateKinematicState: 1
   AutoSetKinematicOnDespawn: 1
+--- !u!114 &-8204909843879319952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2701660219822727997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6adad3ad0c2731448b4b0e5dba7bc2d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Entity
+  ShowTopMostFoldoutHeaderGroup: 1
+  winUI: {fileID: 0}
+  loseUI: {fileID: 0}
+  Hp: 0

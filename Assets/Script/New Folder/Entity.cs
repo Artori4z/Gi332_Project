@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Entity : NetworkBehaviour
 {
+    [SerializeField] private GameObject winUI;
+    [SerializeField] private GameObject loseUI;
     [SerializeField] protected int Hp;
     protected float Speed;
     protected int Def;
@@ -13,7 +16,7 @@ public class Entity : NetworkBehaviour
     protected Vector3 currentVelocity;
     protected float SmoothTime;
     protected virtual void Awake()
-    { 
+    {
         rb = GetComponent<Rigidbody>();
     }
     protected virtual void Start() { }
@@ -55,31 +58,69 @@ public class Entity : NetworkBehaviour
     }
     protected void Die()
     {
-        // 1. ต้องให้ Server เป็นคนตัดสินเท่านั้น เพื่อป้องกัน Client คำนวณพลาด
         if (!IsServer) return;
 
-        // 2. เช็คว่า "เจ้าของ" ของตัวละครที่กำลังตายนี้คือใคร
-        // ถ้า OwnerClientId == 0 โดยปกติคือ Host
-        if (OwnerClientId == NetworkManager.Singleton.LocalClientId)
-        {
-            // ถ้าคนตายคือคนที่มี ID เดียวกับ Server/Host
-            AnnounceWinnerClientRpc("Player 2 Wins!");
-        }
-        else
-        {
-            // ถ้าคนตายไม่ใช่ Host (ก็คือ Client)
-            AnnounceWinnerClientRpc("Player 1 Wins!");
-        }
-
-        // 3. ลบตัวละครออกจากระบบ Network
-        GetComponent<NetworkObject>().Despawn();
+        // ส่ง ID ของคนที่ตายไปทุกเครื่อง
+        HandleGameEndClientRpc(OwnerClientId);
     }
 
     [ClientRpc]
-    private void AnnounceWinnerClientRpc(string message)
+    void HandleGameEndClientRpc(ulong deadClientId)
     {
-        // แสดงผลบนหน้าจอของทุกคน
-        Debug.Log(message);
-        // ตัวอย่าง: WinText.text = message;
+        StartCoroutine(LoadResultScene(deadClientId));
     }
+
+    IEnumerator LoadResultScene(ulong deadClientId)
+    {
+        yield return new WaitForSeconds(1f);
+
+        if (NetworkManager.Singleton.LocalClientId == deadClientId)
+            SceneManager.LoadScene("!LoseScene");
+        else
+            SceneManager.LoadScene("!WinScene");
+    }
+    //protected void Die()
+    //{
+    //    // 1. ต้องให้ Server เป็นคนตัดสินเท่านั้น เพื่อป้องกัน Client คำนวณพลาด
+    //    if (!IsServer) return;
+
+    //    // 2. เช็คว่า "เจ้าของ" ของตัวละครที่กำลังตายนี้คือใคร
+    //    // ถ้า OwnerClientId == 0 โดยปกติคือ Host
+    //    if (OwnerClientId == NetworkManager.Singleton.LocalClientId)
+    //    {
+    //        // ถ้าคนตายคือคนที่มี ID เดียวกับ Server/Host
+    //        AnnounceWinnerClientRpc("Player 2 Wins!");
+    //    }
+    //    else
+    //    {
+    //        // ถ้าคนตายไม่ใช่ Host (ก็คือ Client)
+    //        AnnounceWinnerClientRpc("Player 1 Wins!");
+    //    }
+
+    //    // 3. ลบตัวละครออกจากระบบ Network
+    //    GetComponent<NetworkObject>().Despawn();
+    //}
+
+
+    //[ClientRpc]
+    //private void AnnounceWinnerClientRpc(string message)
+    //{
+    //    // แสดงผลบนหน้าจอของทุกคน
+    //    Debug.Log(message);
+    //    // ตัวอย่าง: WinText.text = message;
+    //}
+
+
+
+    //protected void Die()
+    //{
+    //    if (!IsServer) return;
+
+    //    // ส่ง ID ของคนที่ตายไปให้ทุก Client
+    //    ShowResultClientRpc(OwnerClientId);
+
+    //    // ลบตัวละครออก
+    //    GetComponent<NetworkObject>().Despawn();
+    //}
+
 }
