@@ -11,7 +11,6 @@ using TMPro;
 public class MainMenu : MonoBehaviour
 {
     public GameObject Option, Menu, Muti, Play, Host, Client;
-
     [Header("Relay UI")]
     public TMP_InputField joinCodeInput;
     [Header("Spawn Settings")]

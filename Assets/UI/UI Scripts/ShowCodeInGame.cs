@@ -1,21 +1,50 @@
+using System.Runtime.CompilerServices;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 
-public class ShowCodeInGame : MonoBehaviour
+public class ShowCodeInGame : NetworkBehaviour
 {
-    private TextMeshProUGUI codeText;
-    void Start()
-    {
-        codeText = GetComponent<TextMeshProUGUI>();
+    [Header("UI Elements")]
+    public TextMeshProUGUI codeDisplayPrefab; // ลาก Text ที่จะโชว์รหัสมาใส่
+    public GameObject hostOnlyControls;      // ลาก Parent ของปุ่มที่มีเฉพาะ Host มาใส่ (ถ้ามี)
 
-        // ดึงค่ารหัสที่เก็บไว้ใน MainMenu มาแสดง
-        if (!string.IsNullOrEmpty(MainMenu.JoinCode))
+    public override void OnNetworkSpawn()
+    {
+        // 1. จัดการเรื่องการแสดงรหัส (แสดงให้ทั้ง Host และ Client เห็น)
+        if (codeDisplayPrefab != null)
         {
-            codeText.text = "Room Code: " + MainMenu.JoinCode;
+            if (!string.IsNullOrEmpty(MainMenu.JoinCode))
+            {
+                codeDisplayPrefab.text = "Room Code: " + MainMenu.JoinCode;
+            }
+            else
+            {
+                codeDisplayPrefab.text = "Local / LAN Mode";
+            }
         }
-        else
+
+        // 2. จัดการเรื่องปุ่มเฉพาะ Host
+        if (hostOnlyControls != null)
         {
-            codeText.text = "Local Game"; // กรณีเล่นคนเดียวหรือ LAN
+            // ถ้าไม่ใช่ Host (เป็น Client) ให้ปิด Object นี้ทิ้งไปเลย
+            hostOnlyControls.SetActive(IsHost);
         }
+    }
+
+    // ฟังก์ชันสำหรับปุ่ม Copy (กดได้ทุกคน)
+    public void CopyJoinCode()
+    {
+        string code = MainMenu.JoinCode;
+        if (!string.IsNullOrEmpty(code))
+        {
+            GUIUtility.systemCopyBuffer = code;
+            Debug.Log("Copied Code: " + code);
+        }
+    }
+    public void StartGame()
+    {
+        hostOnlyControls.SetActive(false);
+        codeDisplayPrefab.gameObject.SetActive(false);
     }
 }
