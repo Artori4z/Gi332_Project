@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 84143087791438951}
   - component: {fileID: 474512512637056020}
   - component: {fileID: 4980947031827689541}
+  - component: {fileID: -2772046112246694054}
   m_Layer: 0
   m_Name: Tank
   m_TagString: Player
@@ -192,4 +193,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 459a8fbe68f63d74690f4aa4b9462255, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Tank
+  ShowTopMostFoldoutHeaderGroup: 1
+  Hp: 0
+--- !u!114 &-2772046112246694054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1982939857750706729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e6f8e35ff60f3544849f2bd1e220dc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerSpawnHelper
   ShowTopMostFoldoutHeaderGroup: 1
