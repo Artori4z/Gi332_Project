@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Entity : NetworkBehaviour
 {
-    [SerializeField] protected int Hp;
+    public NetworkVariable<int> NetworkHp = new NetworkVariable<int>(100, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    [SerializeField] protected int MaxHp = 100;
     protected float Speed;
     protected int Def;
     protected int AtkPower;
@@ -15,6 +16,14 @@ public class Entity : NetworkBehaviour
     protected virtual void Awake()
     { 
         rb = GetComponent<Rigidbody>();
+    }
+    public override void OnNetworkSpawn()
+    {
+        // เมื่อตัวละครเกิด ให้เอาค่า Hp จาก Inspector ใส่ใน NetworkVariable (ทำเฉพาะที่ Server)
+        if (IsServer)
+        {
+            NetworkHp.Value = MaxHp;
+        }
     }
     protected virtual void Start() { }
     protected virtual void Update() { }
@@ -41,14 +50,15 @@ public class Entity : NetworkBehaviour
     protected virtual void Move() { }
     public void TakeDamage(int damage)
     {
-        // คำนวณพลังป้องกันตรงนี้เลย
+        if (!IsServer) return;
+
         int finalDamage = damage - Def;
         if (finalDamage < 0) finalDamage = 0;
 
-        Hp -= finalDamage;
+        // ลดเลือดที่ NetworkVariable
+        NetworkHp.Value -= finalDamage;
 
-        // เช็คตายที่ Server
-        if (IsServer && Hp <= 0)
+        if (NetworkHp.Value <= 0)
         {
             Die();
         }

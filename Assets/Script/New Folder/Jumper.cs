@@ -6,11 +6,12 @@ public class Jumper : Player
     private bool isGrounded;
     protected override void Start()
     {
-        Hp = 100;
+        MaxHp = 100;
         Speed = 10f;
         Def = 1;
         AtkPower = 20;
         SmoothTime = 3f;
+        Cooldown = 2f;
     }
     protected override void Class()
     {
@@ -28,7 +29,7 @@ public class Jumper : Player
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
-        if (Hp <= 0)
+        if (NetworkHp.Value <= 0)
         {
             Die();
         }

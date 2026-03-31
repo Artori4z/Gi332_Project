@@ -11,7 +11,7 @@ public class Tank : Player
     private float originalSpeed;
     protected override void Start()
     {
-        Hp = 100;
+        MaxHp = 100;
         Speed = 10f;
         Def = 1;
         AtkPower = 20;

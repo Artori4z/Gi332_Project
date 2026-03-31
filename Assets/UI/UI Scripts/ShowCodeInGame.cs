@@ -7,32 +7,30 @@ public class ShowCodeInGame : NetworkBehaviour
 {
     [Header("UI Elements")]
     public TextMeshProUGUI codeDisplayPrefab; // ลาก Text ที่จะโชว์รหัสมาใส่
-    public GameObject hostOnlyControls;      // ลาก Parent ของปุ่มที่มีเฉพาะ Host มาใส่ (ถ้ามี)
-
+    public GameObject hostOnlyControls;
+    public GameObject InGameUi; // ลาก Parent ของปุ่มที่มีเฉพาะ Host มาใส่ (ถ้ามี)
+    public GameObject LobbyUi;
+    public void Awake()
+    {
+        hostOnlyControls.SetActive(true);
+        codeDisplayPrefab.gameObject.SetActive(true);
+        InGameUi.SetActive(false);
+    }
     public override void OnNetworkSpawn()
     {
-        // 1. จัดการเรื่องการแสดงรหัส (แสดงให้ทั้ง Host และ Client เห็น)
-        if (codeDisplayPrefab != null)
-        {
-            if (!string.IsNullOrEmpty(MainMenu.JoinCode))
-            {
-                codeDisplayPrefab.text = "Room Code: " + MainMenu.JoinCode;
-            }
-            else
-            {
-                codeDisplayPrefab.text = "Local / LAN Mode";
-            }
-        }
-
-        // 2. จัดการเรื่องปุ่มเฉพาะ Host
         if (hostOnlyControls != null)
         {
-            // ถ้าไม่ใช่ Host (เป็น Client) ให้ปิด Object นี้ทิ้งไปเลย
+            if (codeDisplayPrefab != null)
+            {
+                if (!string.IsNullOrEmpty(MainMenu.JoinCode))
+                {
+                    codeDisplayPrefab.text = "Room Code: " + MainMenu.JoinCode;
+                }
+            }
             hostOnlyControls.SetActive(IsHost);
+            codeDisplayPrefab.gameObject.SetActive(IsHost);
         }
     }
-
-    // ฟังก์ชันสำหรับปุ่ม Copy (กดได้ทุกคน)
     public void CopyJoinCode()
     {
         string code = MainMenu.JoinCode;
@@ -44,7 +42,21 @@ public class ShowCodeInGame : NetworkBehaviour
     }
     public void StartGame()
     {
-        hostOnlyControls.SetActive(false);
-        codeDisplayPrefab.gameObject.SetActive(false);
+        // 1. เช็คว่าคนกดต้องเป็น Host/Server เท่านั้น
+        if (!IsServer) return;
+
+        // 2. เรียก ClientRpc เพื่อให้คำสั่งนี้ทำงานในทุกเครื่อง (รวมถึง Host ด้วย)
+        StartGameClientRpc();
+    }
+    [ClientRpc]
+    private void StartGameClientRpc()
+    {
+        // โค้ดส่วนนี้จะทำงานใน "ทุกเครื่อง" ที่เชื่อมต่ออยู่
+        if (hostOnlyControls != null) hostOnlyControls.SetActive(false);
+        if (codeDisplayPrefab != null) codeDisplayPrefab.gameObject.SetActive(false);
+
+        if (InGameUi != null) InGameUi.SetActive(true);
+        if (InGameUi != null) LobbyUi.SetActive(false);
+        Debug.Log("Game Started: UI updated for everyone!");
     }
 }
