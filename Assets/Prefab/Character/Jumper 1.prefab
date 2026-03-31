@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: -96082469149691489}
   - component: {fileID: 3705543723510553459}
   m_Layer: 0
-  m_Name: Jumper
+  m_Name: Jumper 1
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
