@@ -1696,7 +1696,7 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 581823799}
-    PlayerPrefab: {fileID: 2701660219822727997, guid: 30695d5e749fb49419969653fc82410a, type: 3}
+    PlayerPrefab: {fileID: 2701660219822727997, guid: f72914eaea9baab45b7e3c089c8446d6, type: 3}
     Prefabs:
       NetworkPrefabsLists:
       - {fileID: 11400000, guid: c7e6fab9ead3a36479e97b5b492960a8, type: 2}
@@ -4058,7 +4058,6 @@ MonoBehaviour:
   Host: {fileID: 672203979}
   Client: {fileID: 1717636230}
   joinCodeInput: {fileID: 623172583}
-  displayCodeText: {fileID: 0}
   hostSpawnPos: {x: -3.28, y: 0.55, z: 10.63}
   clientSpawnPos: {x: 0, y: 0.55, z: 0}
 --- !u!4 &1709591779
