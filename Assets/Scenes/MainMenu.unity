@@ -462,6 +462,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfba128fe6b098f4496ce85d1f121c51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenu
+  uiManager: {fileID: 0}
 --- !u!1 &292945830
 GameObject:
   m_ObjectHideFlags: 0
@@ -1451,6 +1452,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00831a31c9f0fd0429a76b4e13d8dd86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MultiplayerUI
+  joinCodeInput: {fileID: 0}
+  uiManager: {fileID: 0}
 --- !u!4 &967492947
 Transform:
   m_ObjectHideFlags: 0
